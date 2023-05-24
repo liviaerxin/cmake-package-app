@@ -68,3 +68,6 @@ cmake --install build --config debug
 
 cpack --config ./build/CPackConfig.cmake -G ZIP -C debug
 ```
+
+
+[c++ - What install command does in cmake? - Stack Overflow](https://stackoverflow.com/questions/53121491/what-install-command-does-in-cmake)

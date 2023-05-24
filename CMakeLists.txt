@@ -27,6 +27,8 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     message(STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}")
 endif()
 
+message(STATUS, "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}")
+
 # Find packages go here.
 
 # You should usually split this into folders, but this is a simple example
@@ -35,9 +37,12 @@ endif()
 # Other common choices are STATIC, SHARED, and MODULE
 # Including header files here helps IDEs but is not required.
 # Output libname matches target name, with the usual extensions on your system
-add_library(MyLibExample simple_lib.cpp simple_lib.hpp)
+add_library(MyLibExample src/simple_lib.cpp src/simple_lib.hpp)
 
-add_executable(MyExample simple_example.cpp)
+# For copy header files to `include/`
+set_target_properties(MyLibExample PROPERTIES PUBLIC_HEADER src/simple_lib.hpp)
+
+add_executable(MyExample src/simple_example.cpp)
 
 target_link_libraries(MyExample MyLibExample)
 
@@ -53,6 +58,7 @@ install(TARGETS MyLibExample
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include
 )
 
 install(TARGETS MyExample)
