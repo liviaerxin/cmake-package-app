@@ -2,3 +2,5 @@ build/
 _CPack_Packages/
 install/
 *.zip
+*.DS_Store
+*.dmg

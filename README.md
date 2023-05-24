@@ -1,6 +1,12 @@
-# A CMake Example to Build, Install and Packaging Your Application
+# A CMake Example to Package Standalone Application in Windows, OSX
 
-A streamline workflow to demonstrate how CMake helps to build, install and package an executable program.
+A streamline workflow to demonstrate how CMake helps to build, install and package an executable in windows, osx.
+
+Tags: CMake, CPack, MacOS X bundle.
+
+In OSX: install an executable as bundle, and then package as *.dmg.
+
+In Windows: install an executable as exe, and then package as *.zip.
 
 The project folder structures are seen as an "Interface". Then there's three interfaces:
 
@@ -66,8 +72,18 @@ cmake --build build --config debug
 
 cmake --install build --config debug
 
+# windows
 cpack --config ./build/CPackConfig.cmake -G ZIP -C debug
+
+# osx
+cpack --config ./build/CPackConfig.cmake -G DragNDrop -C debug
 ```
 
 
 [c++ - What install command does in cmake? - Stack Overflow](https://stackoverflow.com/questions/53121491/what-install-command-does-in-cmake)
+
+[c - CMAKE - How to properly copy static library's header file into /usr/include? - Stack Overflow](https://stackoverflow.com/questions/10487256/cmake-how-to-properly-copy-static-librarys-header-file-into-usr-include)
+
+[c++ - How to configure CMakeLists.txt to install public headers of a shared library? - Stack Overflow](https://stackoverflow.com/questions/54271925/how-to-configure-cmakelists-txt-to-install-public-headers-of-a-shared-library)
+
+[C++ project structure and CMake for cross-platform build | The Startup](https://medium.com/swlh/c-project-structure-for-cmake-67d60135f6f5)

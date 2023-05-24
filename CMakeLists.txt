@@ -17,6 +17,12 @@ if(MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 endif()
 
+if(APPLE)
+    set(CMAKE_MACOSX_BUNDLE ON)
+endif()
+
+message(STATUS, "CMAKE_MACOSX_BUNDLE=${CMAKE_MACOSX_BUNDLE}")
+
 # If you set any CMAKE_ variables, that can go here.
 # (But usually don't do this, except maybe for C++ standard)
 
@@ -37,16 +43,30 @@ message(STATUS, "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}")
 # Other common choices are STATIC, SHARED, and MODULE
 # Including header files here helps IDEs but is not required.
 # Output libname matches target name, with the usual extensions on your system
-add_library(MyLibExample src/simple_lib.cpp src/simple_lib.hpp)
 
-# For copy header files to `include/`
-set_target_properties(MyLibExample PROPERTIES PUBLIC_HEADER src/simple_lib.hpp)
+# Add library
+add_library(MyLibExample)
 
-add_executable(MyExample src/simple_example.cpp)
+target_include_directories(MyLibExample PRIVATE ${PROJECT_SOURCE_DIR})
+
+target_sources(MyLibExample
+    PRIVATE simple_lib.cpp
+    PUBLIC FILE_SET HEADERS # For copy header files to `include/`
+    BASE_DIRS ${PROJECT_SOURCE_DIR}
+    FILES simple_lib.hpp
+)
+
+install(TARGETS MyLibExample
+    LIBRARY DESTINATION lib # No need actually
+    ARCHIVE DESTINATION lib # No need actually
+    RUNTIME DESTINATION bin # No need actually
+    FILE_SET HEADERS DESTINATION include # Key need actually
+)
+
+# Add executable
+add_executable(MyExample simple_example.cpp)
 
 target_link_libraries(MyExample MyLibExample)
-
-# # [main]
 
 # This part is so the Modern CMake book can verify this example builds. For your code,
 # you'll probably want tests too
@@ -54,19 +74,26 @@ enable_testing()
 
 add_test(NAME MyExample COMMAND MyExample)
 
-install(TARGETS MyLibExample
+install(TARGETS MyExample
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
-    PUBLIC_HEADER DESTINATION include
+    BUNDLE DESTINATION .
 )
 
-install(TARGETS MyExample)
+if(APPLE)
+    # Note Mac specific extension .app
+    set(APPS ${CMAKE_INSTALL_PREFIX}/MyExample.app)
 
-# ITt's default is
-# install(TARGETS MyExample
-# LIBRARY DESTINATION lib
-# ARCHIVE DESTINATION lib
-# RUNTIME DESTINATION bin
-# )
+    # Directories to look for dependencies
+    set(DIRS ${CMAKE_INSTALL_PREFIX}/lib)
+
+    message(STATUS "APPS=${APPS}")
+    message(STATUS "DIRS=${DIRS}")
+
+    install(CODE "include(BundleUtilities)
+    fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+endif()
+
+# Package management
 include(CPack)
