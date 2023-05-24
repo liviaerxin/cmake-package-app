@@ -91,8 +91,10 @@ if(APPLE)
     message(STATUS "APPS=${APPS}")
     message(STATUS "DIRS=${DIRS}")
 
-    install(CODE "include(BundleUtilities)
-    fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")")
+    install(CODE [[
+        include(BundleUtilities)
+        fixup_bundle("${APPS}" "" "${DIRS}")
+    ]])
 endif()
 
 # Package management
