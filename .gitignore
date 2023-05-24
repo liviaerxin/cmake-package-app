@@ -1,0 +1,4 @@
+build/
+_CPack_Packages/
+install/
+*.zip
