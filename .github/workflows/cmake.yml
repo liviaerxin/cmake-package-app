@@ -33,6 +33,8 @@ jobs:
 
     - name: Configure CMake with shared=${{matrix.shared}}
       run: |
+        cmake --version
+        
         cmake -B build -S . \
         -DBUILD_SHARED_LIBS=${{matrix.shared}} \
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
