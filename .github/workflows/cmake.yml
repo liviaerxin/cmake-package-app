@@ -18,8 +18,8 @@ jobs:
     name: Package platform-dependent application(.exe, bundle) for Windows(.zip) and OSX(.dmg)
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
-        shared: [ON, OFF]
+        os: [macos-latest]
+        shared: [ON]
         include:
           - os: windows-latest
             env:
@@ -35,22 +35,23 @@ jobs:
       run: |
         cmake --version
 
-        cmake -B build -S . \
+        cmake -B ${{github.workspace}}/build -S ${{github.workspace}} \
         -DBUILD_SHARED_LIBS=${{matrix.shared}} \
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
       run: |
-        cmake --build build --config ${{env.BUILD_TYPE}}
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Install
       run:  |
-        cmake --install build --config ${{env.BUILD_TYPE}}
+        cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
         ls ./install
 
     - name: Package
       run: |
-        cpack --config ./build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose --trace
+        cat ${{github.workspace}}/build/cmake_install.cmake
+        cpack --config ${{github.workspace}}/build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose --trace
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
