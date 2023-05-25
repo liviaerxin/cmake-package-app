@@ -89,14 +89,14 @@ if(APPLE)
 endif()
 
 # add CPack to project
-set(CPACK_PACKAGE_NAME "MyExample")
-set(CPACK_PACKAGE_VENDOR "CMake.org")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
-    "MyExample - CPack Component Installation Example")
-set(CPACK_PACKAGE_VERSION "1.0.0")
-set(CPACK_PACKAGE_VERSION_MAJOR "1")
-set(CPACK_PACKAGE_VERSION_MINOR "0")
-set(CPACK_PACKAGE_VERSION_PATCH "0")
+# set(CPACK_PACKAGE_NAME "MyExample")
+# set(CPACK_PACKAGE_VENDOR "CMake.org")
+# set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+# "MyExample - CPack Component Installation Example")
+# set(CPACK_PACKAGE_VERSION "1.0.0")
+# set(CPACK_PACKAGE_VERSION_MAJOR "1")
+# set(CPACK_PACKAGE_VERSION_MINOR "0")
+# set(CPACK_PACKAGE_VERSION_PATCH "0")
 
 # Package management
 include(CPack)
