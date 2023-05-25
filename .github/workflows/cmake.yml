@@ -18,12 +18,12 @@ jobs:
     name: Package platform-dependent application(.exe, bundle) for Windows(.zip) and OSX(.dmg)
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, windows-latest]
         shared: [ON]
         include:
-          # - os: windows-latest
-          #   env:
-          #     CPACK_GENERATOR: ZIP
+          - os: windows-latest
+            env:
+              CPACK_GENERATOR: ZIP
           - os: macos-latest
             env:
               CPACK_GENERATOR: DragNDrop
