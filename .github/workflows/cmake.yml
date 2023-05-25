@@ -26,7 +26,7 @@ jobs:
           #     CPACK_GENERATOR: ZIP
           - os: macos-latest
             env:
-              CPACK_GENERATOR: Bundle                       
+              CPACK_GENERATOR: DragNDrop
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v3
