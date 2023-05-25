@@ -26,7 +26,7 @@ jobs:
           #     CPACK_GENERATOR: ZIP
           - os: macos-latest
             env:
-              CPACK_GENERATOR: DragNDrop
+              CPACK_GENERATOR: ZIP
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
 
     - name: Install
       run:  |
-        cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --prefix ${{github.workspace}}/install
         ls -al ${{github.workspace}}/install
         cpack --config ${{github.workspace}}/build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose
 
