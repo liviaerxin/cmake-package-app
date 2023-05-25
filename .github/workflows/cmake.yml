@@ -18,15 +18,15 @@ jobs:
     name: Package platform-dependent application(.exe, bundle) for Windows(.zip) and OSX(.dmg)
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [ windows-latest]
         shared: [ON]
         include:
           - os: windows-latest
             env:
               CPACK_GENERATOR: ZIP
-          - os: macos-latest
-            env:
-              CPACK_GENERATOR: DragNDrop
+          # - os: macos-latest
+          #   env:
+          #     CPACK_GENERATOR: DragNDrop
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
       shell: bash
       run: |
         cmake --version
-        cmake -B ${{github.workspace}}/build -S ${{github.workspace}} \
+        cmake -B ${{github.workspace}}/build -S . \
         -DBUILD_SHARED_LIBS=${{matrix.shared}} \
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
