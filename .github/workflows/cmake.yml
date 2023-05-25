@@ -21,9 +21,9 @@ jobs:
         os: [macos-latest]
         shared: [ON]
         include:
-          - os: windows-latest
-            env:
-              CPACK_GENERATOR: ZIP
+          # - os: windows-latest
+          #   env:
+          #     CPACK_GENERATOR: ZIP
           - os: macos-latest
             env:
               CPACK_GENERATOR: DragNDrop
@@ -46,12 +46,12 @@ jobs:
     - name: Install
       run:  |
         cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-        ls ./install
+        tree ${{github.workspace}}/install
+        cpack --config ${{github.workspace}}/build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose
 
     - name: Package
       run: |
-        cat ${{github.workspace}}/build/cmake_install.cmake
-        cpack --config ${{github.workspace}}/build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose --trace
+        ls -al ${{github.workspace}}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
