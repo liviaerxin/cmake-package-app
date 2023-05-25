@@ -40,12 +40,12 @@ jobs:
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
-      run: cmake --build build --config ${{env.BUILD_TYPE}}
+      run: |
+        cmake --build build --config ${{env.BUILD_TYPE}}
 
     - name: Install
-      run: |
+      run:  |
         cmake --install build --config ${{env.BUILD_TYPE}}
-        ls -al ./install
 
     - name: Package
       run: cpack --config ./build/CPackConfig.cmake -G ${{matrix.env.CPACK_GENERATOR}}  -C ${{env.BUILD_TYPE}}

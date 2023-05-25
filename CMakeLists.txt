@@ -72,19 +72,20 @@ install(TARGETS MyExample
 
 # Detect `.app` bundles on OSX and make it standalone after install
 if(APPLE)
-    # Note Mac specific extension .app
-    set(APPS ${CMAKE_INSTALL_PREFIX}/MyExample.app)
-
-    # Directories to look for dependencies
-    set(DIRS ${CMAKE_INSTALL_PREFIX}/lib)
-
-    message(STATUS "APPS=${APPS}")
-    message(STATUS "DIRS=${DIRS}")
-
     install(CODE [[
         include(BundleUtilities)
-        fixup_bundle("${APPS}" "" "${DIRS}")
-    ]])
+        
+        # Note Mac specific extension .app
+        set(APPS ${CMAKE_INSTALL_PREFIX}/MyExample.app)
+
+        # Directories to look for dependencies
+        set(DIRS ${CMAKE_INSTALL_PREFIX}/lib)
+
+        message(STATUS "APPS=${APPS}")
+        message(STATUS "DIRS=${DIRS}")
+
+        fixup_bundle(${APPS} "" ${DIRS})
+    ]] COMPONENT Runtime)
 endif()
 
 # Package management
