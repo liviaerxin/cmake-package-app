@@ -1,7 +1,4 @@
 # CMake simple example
-
-# # [main]
-
 cmake_minimum_required(VERSION 3.1...3.26)
 
 project(
@@ -9,40 +6,38 @@ project(
     VERSION 1.0
     LANGUAGES CXX)
 
-# Set using shared libs
-set(BUILD_SHARED_LIBS TRUE)
+# If you set any CMAKE_ variables, that can go here. (But usually don't do this, except maybe for C++ standard)
+
+# Set default cmake-variables if they are not passed/set from CLI. see in `CMakeCache.txt`
+# (When using `option(), these variables must not be set as a normal or cache variable)
+# set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libfoo shared library")
+option(BUILD_SHARED_LIBS "Default BUILD_SHARED_LIBS to ON" ON)
 
 if(MSVC)
     # Create dlls on Windows
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+    option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Default CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS to ON" ON)
 endif()
 
 if(APPLE)
-    set(CMAKE_MACOSX_BUNDLE ON)
+    option(CMAKE_MACOSX_BUNDLE "Default CMAKE_MACOSX_BUNDLE to ON" ON)
 endif()
-
-message(STATUS, "CMAKE_MACOSX_BUNDLE=${CMAKE_MACOSX_BUNDLE}")
-
-# If you set any CMAKE_ variables, that can go here.
-# (But usually don't do this, except maybe for C++ standard)
 
 # Set default `CMAKE_INSTALL_PREFIX` to ${PROJECT_SOURCE_DIR}/install as this is an application-based standalone project.
+# (`option()` will not work as `CMAKE_INSTALL_PREFIX` is already cached!)
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    cmake_path(SET install_path ${PROJECT_SOURCE_DIR}/install)
-    set(CMAKE_INSTALL_PREFIX ${install_path} CACHE PATH "Force path to set CMAKE_INSTALL_PREFIX" FORCE)
-    message(STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}")
+    set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE PATH "Force path to set CMAKE_INSTALL_PREFIX" FORCE)
 endif()
 
-message(STATUS, "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}")
+message(STATUS "BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}")
+message(STATUS "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=${CMAKE_WINDOWS_EXPORT_ALL_SYMBOsLS}")
+message(STATUS "CMAKE_MACOSX_BUNDLE=${CMAKE_MACOSX_BUNDLE}")
+message(STATUS "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}")
+message(STATUS "CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}")
 
 # Find packages go here.
 
 # You should usually split this into folders, but this is a simple example
-
-# This is a "default" library, and will match the *** variable setting.
-# Other common choices are STATIC, SHARED, and MODULE
-# Including header files here helps IDEs but is not required.
-# Output libname matches target name, with the usual extensions on your system
+# Pass library type in CLI(STATIC, SHARED, and MODULE)
 
 # Add library
 add_library(MyLibExample)
@@ -68,12 +63,6 @@ add_executable(MyExample simple_example.cpp)
 
 target_link_libraries(MyExample MyLibExample)
 
-# This part is so the Modern CMake book can verify this example builds. For your code,
-# you'll probably want tests too
-enable_testing()
-
-add_test(NAME MyExample COMMAND MyExample)
-
 install(TARGETS MyExample
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
@@ -81,6 +70,7 @@ install(TARGETS MyExample
     BUNDLE DESTINATION .
 )
 
+# Detect `.app` bundles on OSX and make it standalone after install
 if(APPLE)
     # Note Mac specific extension .app
     set(APPS ${CMAKE_INSTALL_PREFIX}/MyExample.app)

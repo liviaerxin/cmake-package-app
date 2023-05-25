@@ -2,23 +2,32 @@
 
 A streamline workflow to demonstrate how CMake helps to build, install and package an executable in windows, osx.
 
-Tags: CMake, CPack, MacOS X bundle.
+Tags:
 
-In OSX: install an executable as bundle, and then package as *.dmg.
+- CMake
+- CPack
+- MacOS X bundle
+- Shared Library
+- Static Library
+- Standalone Application
 
-In Windows: install an executable as exe, and then package as *.zip.
+Features:
 
-The project folder structures are seen as an "Interface". Then there's three interfaces:
+- In OSX: install an executable as bundle, and then package it as *.dmg.
+- In Windows: install an executable as exe, and then package it and its dependencies as *.zip.
+
+The project folder structures are seen as an `Interface`. Then there's three interfaces:
 
 **source and build interfaces:**
 
 ```sh
 project_root
 ├── CMakeLists.txt
-├── src
-│   └── CMakeLists.txt
-├── build
-│   └── CMakeCache.txt
+├── simple_example.cpp
+├── simple_lib.cpp
+├── simple_lib.hpp
+└── build
+    └── CMakeCache.txt
 ```
 
 **install interface:**
@@ -32,7 +41,7 @@ cmake --install build
 
 Also, you can override it by specifying `-DCMAKE_INSTALL_PREFIX` when running `cmake -B build -S .` or `--prefix` when running `cmake --install`.
 
-This argument path must be absolute path.
+This argument path can be relative path.
 
 ```sh
 cmake --install build --prefix "/where/I/want/it/to/go"
@@ -43,8 +52,9 @@ It's recommended to use a default install layout using `GNUInstallDirs`.
 ```sh
 project_root
 ├── CMakeLists.txt
-├── src
-│   └── CMakeLists.txt
+├── simple_example.cpp
+├── simple_lib.cpp
+├── simple_lib.hpp
 ├── build
 │   └── CMakeCache.txt
 └── install
@@ -66,19 +76,23 @@ project_root
 windows:
 
 ```sh
+# Configure
+# BUILD_SHARED_LIBS default is `ON`
 cmake -B build -S .
+cmake -B build -S . -DBUILD_SHARED_LIBS=OFF
 
+# Build artifacts in `./build` folder
 cmake --build build --config debug
 
+# Install artifacts into `./install` folder
 cmake --install build --config debug
 
-# windows
+# Windows: produce a zip for the standalone app
 cpack --config ./build/CPackConfig.cmake -G ZIP -C debug
 
-# osx
+# OSX: produce a *.dmg for the standalone bundle
 cpack --config ./build/CPackConfig.cmake -G DragNDrop -C debug
 ```
-
 
 [c++ - What install command does in cmake? - Stack Overflow](https://stackoverflow.com/questions/53121491/what-install-command-does-in-cmake)
 
@@ -87,3 +101,5 @@ cpack --config ./build/CPackConfig.cmake -G DragNDrop -C debug
 [c++ - How to configure CMakeLists.txt to install public headers of a shared library? - Stack Overflow](https://stackoverflow.com/questions/54271925/how-to-configure-cmakelists-txt-to-install-public-headers-of-a-shared-library)
 
 [C++ project structure and CMake for cross-platform build | The Startup](https://medium.com/swlh/c-project-structure-for-cmake-67d60135f6f5)
+
+[c++ - Overriding a default option(...) value in CMake from a parent CMakeLists.txt - Stack Overflow](https://stackoverflow.com/questions/3766740/overriding-a-default-option-value-in-cmake-from-a-parent-cmakelists-txt)
