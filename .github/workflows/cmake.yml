@@ -35,21 +35,21 @@ jobs:
       shell: bash
       run: |
         cmake --version
-        cmake -B ${{github.workspace}}/build -S . \
+        cmake -B build -S . \
         -DBUILD_SHARED_LIBS=${{matrix.shared}} \
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
       run: |
-        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        cmake --build build --config ${{env.BUILD_TYPE}}
 
     - name: Install
       run:  |
-        cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        cmake --install build --config ${{env.BUILD_TYPE}}
 
     - name: Package
       run: |
-        cpack --config ${{github.workspace}}/build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose
+        cpack --config ./build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
