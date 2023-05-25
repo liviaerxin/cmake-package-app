@@ -47,10 +47,10 @@ jobs:
       run:  |
         cmake --install build --config ${{env.BUILD_TYPE}}
         ls ./install
-        
+
     - name: Package
       run: |
-        cpack --config ./build/CPackConfig.cmake -G ${{matrix.env.CPACK_GENERATOR}}  -C ${{env.BUILD_TYPE}}
+        cpack --config ./build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose --trace
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
