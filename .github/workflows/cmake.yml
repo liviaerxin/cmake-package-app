@@ -1,0 +1,73 @@
+name: CMake build, install and package cross platform
+
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+  workflow_dispatch:
+  release:
+    types: [created]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  package:
+    name: Package platform-dependent application(.exe, bundle) for Windows(.zip) and OSX(.dmg)
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        shared: [ON, OFF]
+        include:
+          - os: windows-latest
+            env:
+              CPACK_GENERATOR: ZIP
+          - os: macos-latest
+            env:
+              CPACK_GENERATOR: DragNDrop
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake with shared=${{matrix.shared}}
+      run: |
+        cmake -B build -S . \
+        -DBUILD_SHARED_LIBS=${{matrix.shared}} \
+        -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Build
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Install
+      run: cmake --install build --config ${{env.BUILD_TYPE}} --prefix ./install
+
+    - name: Package
+      run: cpack --config ./build/CPackConfig.cmake -G ${{matrix.env.CPACK_GENERATOR}}  -C ${{env.BUILD_TYPE}}
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: |
+          *.zip
+          *.dmg
+  
+  release:
+    name: Release to github
+    needs: [package]
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v') || github.event.release)
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: my-artifact
+          path: dist
+
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          files: |
+            ./dist/*

@@ -77,15 +77,16 @@ windows:
 
 ```sh
 # Configure
-# BUILD_SHARED_LIBS default is `ON`
+# BUILD_SHARED_LIBS default is `ON`, `CMAKE_BUILD_TYPE` default is `debug`
 cmake -B build -S .
 cmake -B build -S . -DBUILD_SHARED_LIBS=OFF
 
 # Build artifacts in `./build` folder
 cmake --build build --config debug
 
-# Install artifacts into `./install` folder
+# Install artifacts into default folder `./install` if not set `CMAKE_INSTALL_PREFIX`
 cmake --install build --config debug
+cmake --install build --config debug --prefix ./install
 
 # Windows: produce a zip for the standalone app
 cpack --config ./build/CPackConfig.cmake -G ZIP -C debug
