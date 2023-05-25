@@ -46,7 +46,7 @@ jobs:
     - name: Install
       run:  |
         cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-        tree ${{github.workspace}}/install
+        ls -al ${{github.workspace}}/install
         cpack --config ${{github.workspace}}/build/CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ${{matrix.env.CPACK_GENERATOR}} --verbose
 
     - name: Package
