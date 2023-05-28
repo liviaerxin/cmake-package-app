@@ -9,7 +9,7 @@ on:
   release:
     types: [created]
     
-permissions: all-write
+permissions: read | write
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
