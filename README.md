@@ -1,6 +1,6 @@
 # A CMake Example to Package Standalone Application in Windows, OSX
 
-A streamline workflow to demonstrate how CMake helps to build, install and package an executable in windows, osx.
+A streamline workflow to demonstrate how CMake helps to build, install and package an relocatable executable in windows, osx.
 
 Tags:
 
@@ -32,12 +32,7 @@ project_root
 
 **install interface:**
 
-When the `CMAKE_INSTALL_PREFIX` is not provided and this project will use the default `${project_root}/install`.
-
-```sh
-# use the default CMAKE_INSTALL_PREFIX=${project_root}/install
-cmake --install build
-```
+This interface is located in the `CMAKE_INSTALL_PREFIX`, and its default value in this project is  `${project_root}/install`.
 
 Also, you can override it by specifying `-DCMAKE_INSTALL_PREFIX` when running `cmake -B build -S .` or `--prefix` when running `cmake --install`.
 
@@ -73,7 +68,7 @@ project_root
        └── documentation
 ```
 
-windows:
+## Get Started
 
 ```sh
 # Configure
@@ -94,6 +89,8 @@ cpack --config ./build/CPackConfig.cmake -G ZIP -C debug
 # OSX: produce a *.dmg for the standalone bundle
 cpack --config ./build/CPackConfig.cmake -G DragNDrop -C debug
 ```
+
+## References
 
 [c++ - What install command does in cmake? - Stack Overflow](https://stackoverflow.com/questions/53121491/what-install-command-does-in-cmake)
 

@@ -72,6 +72,7 @@ install(TARGETS MyExample
 
 # Detect `.app` bundles on OSX and make it standalone after install
 if(APPLE)
+    message(STATUS "CMAKE_INSTALL_NAME_TOOL=${CMAKE_INSTALL_NAME_TOOL}")
     install(CODE [[
         include(BundleUtilities)
         
