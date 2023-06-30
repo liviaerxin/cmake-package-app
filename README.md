@@ -1,8 +1,10 @@
-# A CMake Example to Package Standalone Application in Windows, OSX
+# CMake + CPack Standalone Application on Windows, OSX
 
-A streamline workflow to demonstrate how CMake helps to build, install and package an relocatable executable in windows, osx.
+Package a standalone and relocatable application on Windows and OSX
 
-Tags:
+A streamline workflow demonstrate how CMake helps to build, install and package an relocatable executable in windows, osx.
+
+Keys:
 
 - CMake
 - CPack
@@ -16,7 +18,11 @@ Features:
 - In OSX: install an executable as bundle, and then package it as *.dmg.
 - In Windows: install an executable as exe, and then package it and its dependencies as *.zip.
 
-The project folder structures are seen as an `Interface`. Then there's three interfaces:
+## How CMake Build, Install and Package
+
+We see a project folder structures as an `Interface`.
+
+Then there's three `Interfaces`:
 
 **source and build interfaces:**
 
