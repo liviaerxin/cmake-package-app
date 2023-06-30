@@ -63,6 +63,7 @@ add_executable(MyExample simple_example.cpp)
 
 target_link_libraries(MyExample MyLibExample)
 
+# Install
 install(TARGETS MyExample
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib

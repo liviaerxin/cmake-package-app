@@ -77,18 +77,21 @@ project_root
 ## Get Started
 
 ```sh
-# Configure
+# 1. Configure
 # BUILD_SHARED_LIBS default is `ON`, `CMAKE_BUILD_TYPE` default is `debug`
 cmake -B build -S .
+cmake -B build -S . --fresh
 cmake -B build -S . -DBUILD_SHARED_LIBS=OFF
 
-# Build artifacts in `./build` folder
+# 2. Build artifacts in `./build` folder
 cmake --build build --config debug
 
-# Install artifacts into default folder `./install` if not set `CMAKE_INSTALL_PREFIX`
+# 3. Install artifacts into default folder `./install`
 cmake --install build --config debug
+# Change install folder by setting `--prefix`
 cmake --install build --config debug --prefix ./install
 
+# 4. Package
 # Windows: produce a zip for the standalone app
 cpack --config ./build/CPackConfig.cmake -G ZIP -C debug
 
