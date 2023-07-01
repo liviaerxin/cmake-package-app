@@ -13,6 +13,11 @@ project(
 # set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libfoo shared library")
 option(BUILD_SHARED_LIBS "Default BUILD_SHARED_LIBS to ON" ON)
 
+# Set default `CMAKE_INSTALL_PREFIX` to ${PROJECT_SOURCE_DIR}/install as this is an application-based standalone project.
+# (`option()` will not work as `CMAKE_INSTALL_PREFIX` is already cached!)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE PATH "Force path to set CMAKE_INSTALL_PREFIX" FORCE)
+endif()
 if(MSVC)
     # Create dlls on Windows
     option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Default CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS to ON" ON)
@@ -20,13 +25,10 @@ endif()
 
 if(APPLE)
     option(CMAKE_MACOSX_BUNDLE "Default CMAKE_MACOSX_BUNDLE to ON" ON)
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 endif()
 
-# Set default `CMAKE_INSTALL_PREFIX` to ${PROJECT_SOURCE_DIR}/install as this is an application-based standalone project.
-# (`option()` will not work as `CMAKE_INSTALL_PREFIX` is already cached!)
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE PATH "Force path to set CMAKE_INSTALL_PREFIX" FORCE)
-endif()
 
 message(STATUS "BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}")
 message(STATUS "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=${CMAKE_WINDOWS_EXPORT_ALL_SYMBOsLS}")
@@ -86,7 +88,9 @@ if(APPLE)
         message(STATUS "APPS=${APPS}")
         message(STATUS "DIRS=${DIRS}")
 
-        fixup_bundle(${APPS} "" ${DIRS})
+        # NOTE: No need `${DIRS}` when already setting rpath in exectuable in install by `set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")`
+        # fixup_bundle(${APPS} "" ${DIRS})
+        fixup_bundle(${APPS} "" "")
     ]])
 endif()
 

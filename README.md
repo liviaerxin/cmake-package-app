@@ -1,6 +1,6 @@
-# CMake + CPack Standalone Application on Windows, OSX
+# CMake + CPack + CI/CD Standalone Application on Windows, OSX
 
-Package a standalone and relocatable application on Windows and OSX
+Package a standalone and relocatable application on Windows and OSX, and use Github actions CI/CD
 
 A streamline workflow demonstrate how CMake helps to build, install and package an relocatable executable in windows, osx.
 
@@ -86,10 +86,8 @@ cmake -B build -S . -DBUILD_SHARED_LIBS=OFF
 # 2. Build artifacts in `./build` folder
 cmake --build build --config debug
 
-# 3. Install artifacts into default folder `./install`
+# 3. Install artifacts into default folder `./install`, or change it via `--prefix`
 cmake --install build --config debug
-# Change install folder by setting `--prefix`
-cmake --install build --config debug --prefix ./install
 
 # 4. Package
 # Windows: produce a zip for the standalone app
